@@ -1,0 +1,27 @@
+# Node / React
+node_modules/
+**/node_modules/
+.npm-cache/
+.yarn/
+*.log
+
+# Env
+.env
+**/.env
+.env.local
+
+# Builds
+build/
+dist/
+.next/
+coverage/
+
+# Mac
+.DS_Store
+
+# Uploads
+admin_backend/uploads/
+
+# Editor
+.vscode/
+.idea/
