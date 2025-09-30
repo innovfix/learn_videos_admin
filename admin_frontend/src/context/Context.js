@@ -65,8 +65,7 @@ export const AuthProvider = ({ children }) => {
             setUser(data);
             window.location.href = '/';
         }).catch(error => {
-            const msg = error?.responseMessage || error?.response?.data?.responseMessage || error?.message || 'Login failed';
-            toast.error(msg);
+            toast.error(error.responseMessage);
         })
     }, [dispatch]);
 
@@ -88,15 +87,13 @@ export const AuthProvider = ({ children }) => {
                 localStorage.setItem('admin_details', JSON.stringify(data));
                 setUser(data);
             }).catch(error => {
-                const msg = error?.responseMessage || error?.message || 'Verification failed';
-                toast.error(msg);
+                toast.error(error.message);
                 logout();
             })
             dispatch(site_action.getSiteData()).then((response) => {
                 setSiteData(response?.responseDetails);
             }).catch(error => {
-                const msg = error?.responseMessage || error?.message || 'Failed to load site details';
-                toast.error(msg);
+                toast.error(error.message);
                 logout();
             })
         } catch (err) {

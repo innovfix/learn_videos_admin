@@ -15,18 +15,15 @@ export const login = (data) => {
                         data: data?.data
                     })
                     return resolve(data?.data);
-                } else {
-                    const msg = data?.data?.responseMessage || 'Login failed';
-                    dispatch({ type: LOGIN_ERROR, data: msg });
-                    return reject({ responseMessage: msg });
                 }
             }).catch((error) => {
-                const msg = error?.response?.data?.responseMessage || error?.message || 'Login failed';
-                dispatch({
-                    type: LOGIN_ERROR,
-                    data: msg
-                })
-                return reject({ responseMessage: msg })
+                if (error) {
+                    dispatch({
+                        type: LOGIN_ERROR,
+                        data: error?.response?.data?.responseMessage
+                    })
+                }
+                return reject(error?.response?.data)
             })
         })
     }

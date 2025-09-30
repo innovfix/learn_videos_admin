@@ -9,39 +9,27 @@ import NiceSelect from "../CustomSelect";
 const General = () => {
     const { user } = useAuth();
     const [siteData, setSiteData] = useState({
-        title: '',
-        logo: '',
-        favicon: '',
-        firebase_json:'',
-        copyright_text:'',
-        is_admin_maintenance: 0,
-        is_website_maintenance: 0
+        shareAppIcon: '',
     });
     const [errors, setErrors] = useState({});
     const dispatch = useDispatch();
     const { loading, payload } = useSelector(state => state.GetSiteDetailsReducer);
     const updateLoading = useSelector(state => state.UpdateSiteDetailsReducer);
-    const titleRefFocus = useRef(null);
-    const copyrightTextRefFocus = useRef(null);
     const hasFetched = useRef(null);
-    const [logoPreview, setLogoPreview] = useState(null);
-    const [faviconPreview, setFaviconPreview] = useState(null);
+    const [shareAppIconPreview, setShareAppIconPreview] = useState(null);
     
     useEffect(() => {
         if (hasFetched.current) return;
         hasFetched.current = true;
 
-        dispatch(action.getSiteDetails()).then((response) => {
+        dispatch(action.getGeneralSettings()).then((response) => {
             let data = response.responseDetails;
             delete data.created_at;
             delete data.updated_at;
             delete data.id;
             setSiteData(prevData => ({ ...prevData, ...data }));
-            if(data.favicon){
-                setFaviconPreview(data.favicon);
-            }
-            if(data.logo){
-                setLogoPreview(data.logo);
+            if(data.shareAppIcon){
+                setShareAppIconPreview(data.shareAppIcon);
             }
         });
     }, [dispatch]);
@@ -57,11 +45,9 @@ const General = () => {
 	
 		if (file) {
 			const previewURL = URL.createObjectURL(file);
-            if(name === 'logo'){
-                setLogoPreview(previewURL);
-            } else {
-                setFaviconPreview(previewURL);
-            }
+            if(name === 'share_app_icon'){
+                setShareAppIconPreview(previewURL);
+            } 
 	
             setSiteData((prev) => ({
 				...prev,
@@ -69,13 +55,10 @@ const General = () => {
 			}));
 		} else {
             let file = '';
-            if(name === 'logo'){
-                file = payload.responseDetails.logo;
-                setLogoPreview(file);
-            } else {
-                file = payload.responseDetails.favicon;
-                setFaviconPreview(file);
-            }
+            if(name === 'share_app_icon'){
+                file = payload.responseDetails.shareAppIcon;
+                setShareAppIconPreview(file);
+            } 
 	
             setSiteData((prev) => ({
 				...prev,
@@ -94,57 +77,23 @@ const General = () => {
         }
         
         setErrors({});
-        let customErrors = {};
-        if (siteData.title === '') {
-            customErrors = { ...customErrors, title: "Please Enter Site Title" }
-            titleRefFocus.current.focus();
-        }
-        if (siteData.copyright_text === '') {
-            customErrors = { ...customErrors, copyright_text: "Please Enter Copyright Text" }
-            copyrightTextRefFocus.current.focus();
-        }
-
-        if (Object.keys(customErrors).length > 0) {
-            setErrors(customErrors)
-            return true
-        }
         let data = new FormData();
-        data.append('title', siteData.title);
-        data.append('firebase_json', siteData.firebase_json);
-        data.append('copyright_text', siteData.copyright_text);
-        data.append('is_admin_maintenance', siteData.is_admin_maintenance);
-        data.append('is_website_maintenance', siteData.is_website_maintenance);
-        if(siteData.logo){
-            data.append('logo', siteData.logo);
+        if(siteData.shareAppIcon){
+            data.append('share_app_icon', siteData.shareAppIcon);
         }
-        if(siteData.favicon){
-            data.append('favicon', siteData.favicon);
-        }
-        dispatch(action.updateSiteDetails(data)).then((response) => {
+        dispatch(action.GeneralSettings(data)).then((response) => {
             toast.success(response.responseMessage);
             let data = response.responseDetails;
             delete data.created_at;
             delete data.updated_at;
             delete data.id;
             setSiteData(data);
-            if(data.favicon){
-                setFaviconPreview(data.favicon);
-            }
-            if(data.logo){
-                setLogoPreview(data.logo);
+            if(data.shareAppIcon){
+                setShareAppIconPreview(data.shareAppIcon);
             }
         }).catch(error => {
             toast.error(error.responseMessage);
         })
-    }
-    const handleAutoResize = (e) => {
-        e.target.style.height = 'auto';
-        e.target.style.height = `${e.target.scrollHeight}px`;
-        onChange(e);
-    };
-
-    const niceSelectOnChange = (name, value) => {
-        setSiteData({ ...siteData, [name]: value })
     }
 
     return (
@@ -157,54 +106,9 @@ const General = () => {
                             <div className="row">
                                 <div className="col-md-6 col-12">
                                     <div className="form-group">
-                                        <label htmlFor="site-title">Site Title / Admin Panel Name</label>
-                                        <input type="text" id="site-title" ref={titleRefFocus} value={siteData?.title} onChange={onChange} name="title" placeholder="Enter site title" />
-                                        <span className='text-danger pt-2'>{errors?.title}</span>
-                                    </div>
-                                </div>
-                                <div className="col-md-6 col-12">
-                                    <div className="form-group">
-                                        <label htmlFor="copyright_text">Copyright Text</label>
-                                        <input type="text" id="copyright_text" ref={copyrightTextRefFocus} value={siteData?.copyright_text} onChange={onChange} name="copyright_text" placeholder="Enter copyright text" />
-                                        <span className='text-danger pt-2'>{errors?.copyright_text}</span>
-                                    </div>
-                                </div>
-                                <div className="col-md-6 col-12">
-                                    <div className="form-group">
-                                        <label htmlFor="site-logo">Site Logo</label>
-                                        <input type="file" id="site-logo" name="logo" accept="image/*" onChange={handleImageChange} />
-                                        { logoPreview ? <img src={logoPreview} alt="logo" style={{width: '50px', height: '50px', marginTop: '10px'}} /> : '' }
-                                    </div>
-                                </div>
-                                <div className="col-md-6 col-12">
-                                    <div className="form-group">
-                                        <label htmlFor="favicon">Favicon</label>
-                                        <input type="file" id="favicon" name="favicon" accept="image/x-icon,image/png" onChange={handleImageChange} />
-                                        { faviconPreview ? <img src={faviconPreview} alt="favicon" style={{width: '50px', height: '50px', marginTop: '10px'}} /> : '' }
-                                    </div>
-                                </div>
-                                <div className="col-md-6 col-12">
-                                    <div className="form-group">
-                                        <label htmlFor="is_admin_maintenance">Admin Panel Maintenance</label>
-                                        <NiceSelect id="is_admin_maintenance" name="is_admin_maintenance" className="form-control" value={siteData.is_admin_maintenance} onChange={niceSelectOnChange}>
-                                            <option value={0}>No</option>
-                                            <option value={1}>Yes</option>
-                                        </NiceSelect>
-                                    </div>
-                                </div>
-                                <div className="col-md-6 col-12">
-                                    <div className="form-group">
-                                        <label htmlFor="is_website_maintenance">Website Maintenance</label>
-                                        <NiceSelect id="is_website_maintenance" name="is_website_maintenance" className="form-control" value={siteData.is_website_maintenance} onChange={niceSelectOnChange}>
-                                            <option value={0}>No</option>
-                                            <option value={1}>Yes</option>
-                                        </NiceSelect>
-                                    </div>
-                                </div>
-                                <div className="col-md-12 col-12">
-                                    <div className="form-group">
-                                        <label htmlFor="favicon">Firebase JSON</label>
-                                        <textarea id="firebase_json" name="firebase_json" className="form-control firebase-json" rows="5" placeholder="Enter firebase JSON" onInput={handleAutoResize} value={siteData.firebase_json || ""} />
+                                        <label htmlFor="site-logo">Share App Icon</label>
+                                        <input type="file" id="share-app-icon" name="share_app_icon" accept="image/*" onChange={handleImageChange} />
+                                        { shareAppIconPreview ? <img src={shareAppIconPreview} alt="share app icon" style={{width: '50px', height: '50px', marginTop: '10px'}} /> : '' }
                                     </div>
                                 </div>
                             </div>

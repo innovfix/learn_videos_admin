@@ -39,15 +39,15 @@ export const getProfile = () => {
         }
     })
 }
-export const updateSiteDetails = (data) => {
-    return axios.post(`${API_BASE_URL}admin/v1/site-details/update`, data, {
+export const updateGeneralSettings = (data) => {
+    return axios.post(`${API_BASE_URL}admin/v1/general-settings/update`, data, {
         headers: {
             'Authorization': `Bearer ${token}`
         }
     })
 }
-export const getSiteDetails = () => {
-    return axios.get(`${API_BASE_URL}admin/v1/site-details/details`, {
+export const getGeneralSettings = () => {
+    return axios.get(`${API_BASE_URL}admin/v1/general-settings/details`, {
         headers: {
             'Authorization': `Bearer ${token}`
         }
@@ -285,28 +285,28 @@ export const deletePlans = (data) => {
     })
 }
 export const getSeries = (data) => {
-    return axios.post(`${API_BASE_URL}admin/v1/series/get`, data, {
+    return axios.post(`${API_BASE_URL}admin/v1/shorts/get`, data, {
         headers: {
             'Authorization': `Bearer ${token}`
         }
     })
 }
 export const getSeriesDetails = (data) => {
-    return axios.post(`${API_BASE_URL}admin/v1/series/details`, data, {
+    return axios.post(`${API_BASE_URL}admin/v1/shorts/details`, data, {
         headers: {
             'Authorization': `Bearer ${token}`
         }
     })
 }
 export const addSeries = (data) => {
-    return axios.post(`${API_BASE_URL}admin/v1/series/add`, data, {
+    return axios.post(`${API_BASE_URL}admin/v1/shorts/add`, data, {
         headers: {
             'Authorization': `Bearer ${token}`
         }
     })
 }
 export const updateSeries = (data) => {
-    return axios.post(`${API_BASE_URL}admin/v1/series/update`, data, {
+    return axios.post(`${API_BASE_URL}admin/v1/shorts/update`, data, {
         headers: {
             'Authorization': `Bearer ${token}`
         }
@@ -334,7 +334,7 @@ export const updateFreeSeries = (data) => {
     })
 }
 export const deleteSeries = (data) => {
-    return axios.post(`${API_BASE_URL}admin/v1/series/delete`, data, {
+    return axios.post(`${API_BASE_URL}admin/v1/shorts/delete`, data, {
         headers: {
             'Authorization': `Bearer ${token}`
         }
