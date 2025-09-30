@@ -41,19 +41,12 @@ const Series = () => {
 		id: 0,
 		title: '',
 		description: '',
-		thumbnail: '',
-		poster: '',
+		thumbnail_url: '',
 		video: '',
-		category_id: '',
-		type_id: '',
 		tag_id: [],
-		total_episode: '',
-		free_episodes: '',
-		is_free: 0,
-		is_recommended: 0
 	});
 	const [filePreview, setFilePreview] = useState({
-		thumbnail: '',
+		thumbnail_url: '',
 		video: '',
 	});
 	const [categoryList, setCategoryList] = useState([]);
@@ -423,25 +416,15 @@ const Series = () => {
 
 	const editSeries = (rowData) => {
 		openModel('Edit');
-        setSeriesData({
+		setSeriesData({
 			id: rowData.id,
 			title: rowData.title,
 			description: rowData.description,
-			category_id: rowData.category_id,
-			type_id: rowData.type_id,
-            // keep tag ids as strings to match Select2 option values
-            tag_id: isEmpty(rowData.tag_id) ? [] : rowData.tag_id.split(",").map(x => x.trim()),
-			total_episode: rowData.total_episode,
-			free_episodes: rowData.free_episodes,
-			is_free: rowData.is_free,
-			is_recommended: rowData.is_recommended,
-			poster: rowData.poster
+			tag_id: isEmpty(rowData.tag_id) ? [] : rowData.tag_id.split(",").map(Number),
 		});
 		setFilePreview({
-			thumbnail: rowData.thumbnail,
-            // use cover_video field for preview if present
-            video: rowData.cover_video || rowData.video,
-			poster: rowData.poster,
+			thumbnail_url: rowData.thumbnail_url,
+			video: rowData.video,
 		});
 	}
 
@@ -514,19 +497,12 @@ const Series = () => {
 			id: 0,
 			title: '',
 			description: '',
-			thumbnail: '',
-			poster: '',
+			thumbnail_url: '',
 			video: '',
-			category_id: '',
-			type_id: '',
 			tag_id: [],
-			total_episode: '',
-			free_episodes: '',
-			is_free: 0,
-			is_recommended: 0
 		});
 		setFilePreview({
-			thumbnail: '',
+			thumbnail_url: '',
 			video: '',
 			poster:''
 		});
@@ -601,8 +577,8 @@ const Series = () => {
 		} else if (seriesData.description === '') {
 			customErrors = { ...customErrors, description: "Please Enter description" }
 			descriptionRefFocus.current.focus();
-		} else if (seriesData.thumbnail === '') {
-			customErrors = { ...customErrors, thumbnail: "Please Select Thumbnail Image" }
+		} else if (seriesData.thumbnail_url === '') {
+			customErrors = { ...customErrors, thumbnail_url: "Please Select Thumbnail Image" }
 			thumbnailRefFocus.current.focus();
 		} else if (seriesData.video === '') {
 			customErrors = { ...customErrors, video: "Please Select Cover Video" }
@@ -617,17 +593,13 @@ const Series = () => {
 			return true
 		}
 
-        let data = new FormData();
+		let data = new FormData();
 
-        data.append('title', seriesData.title);
-        data.append('description', seriesData.description);
-        data.append('thumbnail', seriesData.thumbnail);
-        data.append('video', seriesData.video);
-        data.append('tag_id', seriesData.tag_id.join(','));
-        // include poster if provided by the upload component (optional)
-        if (seriesData.poster) {
-            data.append('poster', seriesData.poster);
-        }
+		data.append('title', seriesData.title);
+		data.append('description', seriesData.description);
+		data.append('thumbnail_url', seriesData.thumbnail_url);
+		data.append('video', seriesData.video);
+		data.append('tag_id', seriesData.tag_id.join(','));
 
 		if(seriesData.id !== 0){
 			data.append('id', seriesData.id);
@@ -697,7 +669,7 @@ const Series = () => {
 							<div className="series-cards">
 								{visibleData.map((item, index) => (
 									<div className="cards" key={index}>
-                                        <img src={item?.poster || item?.thumbnail || item?.thumbnail_url || 'https://flixy.retrytech.site/assets/img/placeholder-image.png'} alt="Poster" className="series-poster" />
+										<img src={item?.thumbnail_url} alt="Poster" className="series-poster" />
 										<div className="series-card-content">
 											<div className="series-card-header">
 												<span className="series-card-date">{moment(item?.created_at).format("MMMM DD, YYYY")}</span>
@@ -705,7 +677,6 @@ const Series = () => {
 											</div>
 											<div className="series-card-footer">
 												<div className="card-actions">
-                                                    <button className="btn btn-view" onClick={() => navigate('/shorts/'+item.id)}>View</button>
 													<button className="btn btn-edit" onClick={() => editSeries(item)}>Edit</button>
 													<button className="btn btn-delete" onClick={() => deleteSeries(item)}>Delete</button>
 												</div>
@@ -787,13 +758,13 @@ const Series = () => {
 											<div className="col-sm-6 col-12">
 												<div className="form-group">
 													<CustomImageBox
-														imageUrl={!isEmpty(filePreview.thumbnail) ? filePreview.thumbnail : "https://flixy.retrytech.site/assets/img/placeholder-image.png"}
+														imageUrl={!isEmpty(filePreview.thumbnail_url) ? filePreview.thumbnail_url : "https://flixy.retrytech.site/assets/img/placeholder-image.png"}
 														onChange={handleImage}
-														label={'Thumbnail'}
+														label={'Thumbnail_url'}
 														ref={thumbnailRefFocus}
-														name="thumbnail"
+														name="thumbnail_url"
 													/>
-													<span className='text-danger pt-2'>{errors?.thumbnail}</span>
+													<span className='text-danger pt-2'>{errors?.thumbnail_url}</span>
 												</div>
 											</div>
 											<div className="col-sm-6 col-12">

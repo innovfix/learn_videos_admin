@@ -66,8 +66,7 @@ class UpdateIsblockedUserController {
 
             
         } catch (err) {
-            const resp = await utils.throwCatchError(err);
-            return context.status(400).send(resp);
+            return context.status(400).send(await utils.throwCatchError(err));
         }
     }
 

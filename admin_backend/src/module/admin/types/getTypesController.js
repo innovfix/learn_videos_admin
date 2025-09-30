@@ -76,8 +76,7 @@ class GetTypesController {
                 }
             });
         } catch (err) {
-            // Return error object; caller decides how to send
-            return await utils.throwCatchError(err);
+            return context.status(400).send(await utils.throwCatchError(err));
         }
     }
 }

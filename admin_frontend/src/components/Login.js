@@ -6,7 +6,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/Context';
 const Login = () => {
     const { userLogin, token } = useAuth();
-    const [loginData, setLoginData] = useState({ email: 'admin@example.com', password: 'admin123' });
+    const [loginData, setLoginData] = useState({ email: 'admin@gmail.com', password: 'Admin@123' });
     const [errors, setErrors] = useState({});
     // const dispatch = useDispatch();
     const { loading } = useSelector(state => state.LoginReducer);
@@ -56,13 +56,6 @@ const Login = () => {
             'password': loginData.password
         };
         userLogin(data);
-        // Safety fallback: if navigation doesn't occur after login request, force-redirect after 1.5s
-        setTimeout(() => {
-            const t = localStorage.getItem('token');
-            if (t) {
-                window.location.href = '/';
-            }
-        }, 1500);
         // dispatch(action.login(data)).then((response) => {
         //     toast.success(response.responseMessage);
         //     localStorage.setItem('token', response.responseDetails.token.accessToken);

@@ -1,14 +1,14 @@
 import {UPDATE_SITE_DETAILS_ERROR, UPDATE_SITE_DETAILS_LOADING, UPDATE_SITE_DETAILS_SUCCESS, GET_SITE_DETAILS_ERROR, GET_SITE_DETAILS_LOADING, GET_SITE_DETAILS_SUCCESS, SITE_DATA_ERROR, SITE_DATA_LOADING, SITE_DATA_SUCCESS} from "../Type";
 import * as Authservices from '../../Services/services';
 
-export const updateSiteDetails = (data) => {
+export const updateGeneralSettings = (data) => {
     return (dispatch) => {
         return new Promise((resolve, reject) => {
             dispatch({
                 type: UPDATE_SITE_DETAILS_LOADING,
                 data: true
             })
-            Authservices.updateSiteDetails(data).then((data) => {
+            Authservices.GeneralSettings(data).then((data) => {
                 if (data?.status === 200) {
                     dispatch({
                         type: UPDATE_SITE_DETAILS_SUCCESS,
@@ -29,14 +29,14 @@ export const updateSiteDetails = (data) => {
     }
 }
 
-export const getSiteDetails = () => {
+export const getGeneralSettings = () => {
     return (dispatch) => {
         return new Promise((resolve, reject) => {
             dispatch({
                 type: GET_SITE_DETAILS_LOADING,
                 data: true
             })
-            Authservices.getSiteDetails().then((data) => {
+            Authservices.getGeneralSettings().then((data) => {
                 if (data?.status === 200) {
                     dispatch({
                         type: GET_SITE_DETAILS_SUCCESS,

@@ -3,10 +3,17 @@
   "version": "1.0.0",
   "description": "",
   "main": "app.js",
+  "type": "commonjs",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon src/app.js",
-    "dev": "nodemon"
+    "dev": "nodemon",
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix .",
+    "format:check": "prettier -c .",
+    "format": "prettier -w .",
+    "lint-staged": "lint-staged",
+    "checks": "npm update && npm outdated && npm audit"
   },
   "keywords": [],
   "author": "",
@@ -39,5 +46,27 @@
     "resend": "^4.0.1",
     "stripe": "^18.2.1",
     "uuid": "^9.0.1"
+  },
+  "lint-staged": {
+    "*.{js,json}": [
+      "npm run format",
+      "npm run lint",
+      "git add"
+    ]
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.33.0",
+    "esbuild":"0.18.0",
+    "eslint": "7.32.0",
+    "eslint-config-prettier": "8.5.0",
+    "eslint-plugin-import": "2.26.0",
+    "eslint-plugin-jest": "27.1.1",
+    "eslint-plugin-prettier": "4.2.1",
+    "globals": "^16.3.0",
+    "husky": "8.0.1",
+    "jest": "^29.7.0",
+    "lint-staged": "15.2.2",
+    "prettier": "2.7.1",
+    "serverless": "3.38.0"
   }
 }
