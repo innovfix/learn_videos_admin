@@ -26,8 +26,8 @@ class GetTagesController {
                 return context.status(400).send(getTagesResponse);
             }
         } catch (err) {
-            // Handle errors only here at the top level
-            console.log("err=============>", err);
+            // Handle errors
+            console.log("err=============>",err)
             return context.status(400).send(await utils.throwCatchError(err));
         }
     }
@@ -76,9 +76,7 @@ class GetTagesController {
                 }
             });
         } catch (err) {
-            // Do not write to the response in the operation method.
-            // Return a plain error object and let the caller decide how to send it.
-            return await utils.throwCatchError(err);
+            return context.status(400).send(await utils.throwCatchError(err));
         }
     }
 }

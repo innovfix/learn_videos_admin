@@ -1,12 +1,12 @@
-const express = require("express");
-const cors = require("cors");
+const express = require('express');
+const cors = require('cors');
 const path = require('path');
-const helmet = require("helmet");
+const helmet = require('helmet');
 const { v4: uuidv4 } = require('uuid');
-const dotenv = require("dotenv");
-const samLib = require("../src/response-codes/lib");
-const adminRoute = require("./module/admin/adminRoute");
-const userRoute = require("./module/user/userRoute");
+const dotenv = require('dotenv');
+const samLib = require('../src/response-codes/lib');
+const adminRoute = require('./module/admin/adminRoute');
+const userRoute = require('./module/user/userRoute');
 
 class Server {
   constructor() {
@@ -35,8 +35,8 @@ class Server {
 
   setCors() {
     const corsOptions = {
-      origin: "*",
-      methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+      origin: '*',
+      methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
       optionsSuccessStatus: 204,
     };
 
@@ -44,42 +44,37 @@ class Server {
   }
 
   setRouter() {
-    this.app.use('/uploads', express.static('uploads', {
-      setHeaders: (res, path) => {
-        res.setHeader("Access-Control-Allow-Origin", "*"); // Allow all origins
-        res.setHeader("Cross-Origin-Resource-Policy", "cross-origin"); // Fix for favicon
-        res.setHeader("Access-Control-Allow-Methods", "GET, OPTIONS");
-        res.setHeader("Access-Control-Allow-Headers", "Origin, Content-Type, Accept");
-      },
-    }));
+    this.app.use(
+      '/uploads',
+      express.static('uploads', {
+        setHeaders: (res, path) => {
+          res.setHeader('Access-Control-Allow-Origin', '*'); // Allow all origins
+          res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin'); // Fix for favicon
+          res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
+          res.setHeader('Access-Control-Allow-Headers', 'Origin, Content-Type, Accept');
+        },
+      }),
+    );
     this.app.use((req, res, next) => {
       req.requestId = req.headers['x-request-id'] || uuidv4();
-      res.setHeader('X-Request-Id', req.requestId);  // Optional: include requestId in response headers
+      res.setHeader('X-Request-Id', req.requestId); // Optional: include requestId in response headers
       next();
     });
-    this.app.use("/admin/v1", adminRoute);
-    this.app.use("/user/v1", userRoute);
-    this.router.get("/details", (req, res, next) => {
-      const getSiteDataController = require("./module/admin/site_details/getSiteDataController");
+    this.app.use('/admin/v1', adminRoute);
+    this.app.use('/user/v1', userRoute);
+    this.router.get('/details', (req, res, next) => {
+      const getSiteDataController = require('./module/admin/site_details/getSiteDataController');
       getSiteDataController.getSiteDetails(req, res, next);
     });
-    this.router.post("/v1/license/verify", (req, res, next) => {
-      const getPurchaseController = require("./module/getPurchaseController");
+    this.router.post('/v1/license/verify', (req, res, next) => {
+      const getPurchaseController = require('./module/getPurchaseController');
       getPurchaseController.getPurchase(req, res, next);
     });
-    this.router.post("/v1/license", (req, res, next) => {
-      const purchaseController = require("./module/purchaseController");
+    this.router.post('/v1/license', (req, res, next) => {
+      const purchaseController = require('./module/purchaseController');
       purchaseController.purchase(req, res, next);
     });
-    // Root health endpoint
-    this.router.get("/", (req, res) => {
-      res.json({ status: "OK", message: "API running", endpoints: [
-        "/details",
-        "/admin/v1/*",
-        "/user/v1/*",
-      ]});
-    });
-    this.app.use("/", this.router);
+    this.app.use('/', this.router);
     this.app.use(cors());
   }
 
@@ -87,40 +82,41 @@ class Server {
 
   error404Handler() {
     this.app.use((req, res, next) => {
-      res.status(404).json({ status: 404, message: "pages not found" });
+      res.status(404).json({ status: 404, message: 'pages not found' });
     });
   }
 
   errorHandler() {
     this.app.use((error, req, res, next) => {
       const errorStatus = 400 || 500;
-      res.set("Access-Control-Allow-Origin", "*");
-      if (error.message && parseInt(error.message) > 0 && !error.message.includes(",")) {
+      res.set('Access-Control-Allow-Origin', '*');
+      if (error.message && parseInt(error.message) > 0 && !error.message.includes(',')) {
         let errorStatement = {
-            responseId: req.body.requestHeader?.requestId,
-            responseCode: error.message,
-            responseMessage: samLib.responsecodes().getStatusText(error.message),
-            responseMessageList: [],
+          responseId: req.body.requestHeader?.requestId,
+          responseCode: error.message,
+          responseMessage: samLib.responsecodes().getStatusText(error.message),
+          responseMessageList: [],
         };
         res.status(errorStatus).json(errorStatement);
-      } else if (error?.message && error.message.includes(",")) {
-        const errorMessageParts = error.message.split(",");
+      } else if (error?.message && error.message.includes(',')) {
+        const errorMessageParts = error.message.split(',');
         var result = [];
         errorMessageParts.forEach((part) => {
           result.push(samLib.responsecodes().getStatusText(part.trim()));
         });
         let errorStatement = {
-            responseCode: samLib.responsecodes().INVALID_REQUEST,
-            responseMessage: samLib.responsecodes().getStatusText(samLib.responsecodes().INVALID_REQUEST),
-            responseMessageList: result,
+          responseCode: samLib.responsecodes().INVALID_REQUEST,
+          responseMessage: samLib.responsecodes().getStatusText(samLib.responsecodes().INVALID_REQUEST),
+          responseMessageList: result,
         };
         res.status(errorStatus).json(errorStatement);
       } else {
-        const errorMessage = error.message || error || error.NotAuthorizedException || "Something Went Wrong Plz Try Again";
+        const errorMessage =
+          error.message || error || error.NotAuthorizedException || 'Something Went Wrong Plz Try Again';
         let errorStatement = {
-            responseCode: errorStatus,
-            responseMessage: errorMessage,
-            responseMessageList: [],
+          responseCode: errorStatus,
+          responseMessage: errorMessage,
+          responseMessageList: [],
         };
         res.status(errorStatus).json(errorStatement);
       }
@@ -128,6 +124,4 @@ class Server {
   }
 }
 
-
 module.exports = new Server().app;
-

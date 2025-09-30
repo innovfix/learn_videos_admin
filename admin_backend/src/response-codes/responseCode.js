@@ -224,6 +224,7 @@ responseCodes[(exports.REFERER_REQUIRED = "3062")] = "Error: The referer field i
 responseCodes[(exports.FOLLOW_US_ON_WHATSAPP_CHANNEL_REQUIRED = "3063")] = "Error: The follow us on whatsapp channel field is mandetory and must be provided";
 responseCodes[(exports.INVALID_EPISODE_NUMBER = "3064")] ="Error: Please provide numeric episode number.";
 responseCodes[(exports.DUPLICATE_EPISODE_NUMBER = "3065")] ="Error: Duplicate episode_number for this series.";
+
 exports.getStatusText = function (responseCode) {
 	if (responseCodes.hasOwnProperty(responseCode)) {
 		return responseCodes[responseCode];

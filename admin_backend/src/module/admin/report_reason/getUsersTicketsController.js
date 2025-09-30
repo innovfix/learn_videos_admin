@@ -27,8 +27,8 @@ class GetUsersTicketsController {
             }
         } catch (err) {
             // Handle errors
-            const resp = await utils.throwCatchError(err);
-            return context.status(400).send(resp);
+            console.log("err=============>",err)
+            return context.status(400).send(await utils.throwCatchError(err));
         }
     }
 
@@ -75,8 +75,7 @@ class GetUsersTicketsController {
                 }
             });
         } catch (err) {
-            const resp = await utils.throwCatchError(err);
-            return context.status(400).send(resp);
+            return context.status(400).send(await utils.throwCatchError(err));
         }
     }
 }

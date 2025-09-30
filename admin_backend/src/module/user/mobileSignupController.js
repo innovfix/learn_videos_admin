@@ -79,22 +79,10 @@ class MobileSignupController {
                     rows[0].login_reward = 1;
                     rows[0].wallet_balance = updated_coin;
                 }
-                const u = rows[0] || {};
-                const responseUser = {
-                    id: u.id,
-                    uid: u.uid,
-                    email: u.email,
-                    name: u.name,
-                    profile_image: u.profile_picture,
-                    login_type: u.login_type,
-                    wallet_balance: u.wallet_balance,
-                    coin_balance: u.coin_balance,
-                    token: u.token,
-                };
                 return await utils.generateResponseObj({
                     responseCode: responsecodes().SUCCESS_OK,
                     responseMessage: getStatusText(responsecodes().SUCCESS_OK),
-                    responseData: responseUser
+                    responseData: rows[0]
                 });
             } else if(guestUser.length > 0) {
                 // let query = '';
@@ -153,22 +141,10 @@ class MobileSignupController {
                     rows[0].login_reward = 1;
                     rows[0].wallet_balance = updated_coin;
                 }
-                const u = rows[0] || {};
-                const responseUser = {
-                    id: u.id,
-                    uid: u.uid,
-                    email: u.email,
-                    name: u.name,
-                    profile_image: u.profile_picture,
-                    login_type: u.login_type,
-                    wallet_balance: u.wallet_balance,
-                    coin_balance: u.coin_balance,
-                    token: u.token,
-                };
                 return await utils.generateResponseObj({
                     responseCode: responsecodes().SUCCESS_OK,
                     responseMessage: getStatusText(responsecodes().SUCCESS_OK),
-                    responseData: responseUser
+                    responseData: rows[0]
                 });
             } else {
                 let uid = await utils.generate16DigitUUID();
@@ -219,27 +195,14 @@ class MobileSignupController {
                     rows[0].login_reward = 1;
                     rows[0].wallet_balance = updated_coin;
                 }
-                const u = rows[0] || {};
-                const responseUser = {
-                    id: u.id,
-                    uid: u.uid,
-                    email: u.email,
-                    name: u.name,
-                    profile_image: u.profile_picture,
-                    login_type: u.login_type,
-                    wallet_balance: u.wallet_balance,
-                    coin_balance: u.coin_balance,
-                    token: u.token,
-                };
                 return await utils.generateResponseObj({
                     responseCode: responsecodes().SUCCESS_OK,
                     responseMessage: getStatusText(responsecodes().SUCCESS_OK),
-                    responseData: responseUser
+                    responseData: rows[0]
                 });
             }
         } catch (err) {
-            // Return plain error object; caller handles response
-            return await utils.throwCatchError(err);
+            return context.status(400).send(await utils.throwCatchError(err));
         }
     }
 
