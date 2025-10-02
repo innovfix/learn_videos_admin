@@ -94,7 +94,6 @@ class AdminRouter {
 
   postRouter() {
     this.router.post('/signin', (req, res, next) => {
-      console.log('siva', 'signn');
       const SigninController = require('./signinController');
       SigninController.signIn(req, res, next);
     });
