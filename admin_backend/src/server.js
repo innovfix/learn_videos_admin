@@ -1,4 +1,6 @@
 const express = require('express');
+const morgan = require('morgan');
+
 const cors = require('cors');
 const path = require('path');
 const helmet = require('helmet');
@@ -7,10 +9,25 @@ const dotenv = require('dotenv');
 const samLib = require('../src/response-codes/lib');
 const adminRoute = require('./module/admin/adminRoute');
 const userRoute = require('./module/user/userRoute');
+const util = require('util');
+
+const fs = require('fs');
+// Create a log file (append mode)
+const logFile = fs.createWriteStream(path.join(__dirname, 'server.log'), { flags: 'a' });
+
+// Keep default console methods
+const logStdout = process.stdout;
+console.log = function () {
+  const message = util.format.apply(null, arguments) + '\n';
+  logFile.write(message); // write to file
+  logStdout.write(message); // write to console
+};
+console.error = console.log; // also log errors
 
 class Server {
   constructor() {
     this.app = express();
+    this.app.use(morgan('dev'));
     this.router = express.Router();
     this.setConfiguration();
     this.setRouter();
@@ -56,6 +73,8 @@ class Server {
       }),
     );
     this.app.use((req, res, next) => {
+      console.log('iva', req.path);
+
       req.requestId = req.headers['x-request-id'] || uuidv4();
       res.setHeader('X-Request-Id', req.requestId); // Optional: include requestId in response headers
       next();
@@ -82,12 +101,15 @@ class Server {
 
   error404Handler() {
     this.app.use((req, res, next) => {
+      console.log('iva', req.path);
       res.status(404).json({ status: 404, message: 'pages not found' });
     });
   }
 
   errorHandler() {
     this.app.use((error, req, res, next) => {
+      console.log('iva', error, req.path);
+
       const errorStatus = 400 || 500;
       res.set('Access-Control-Allow-Origin', '*');
       if (error.message && parseInt(error.message) > 0 && !error.message.includes(',')) {

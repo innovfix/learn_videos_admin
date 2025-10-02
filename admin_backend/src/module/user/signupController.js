@@ -11,6 +11,8 @@ const jwt = require('jsonwebtoken');
 
 class SignupController {
   static async sendOtp(req, res) {
+    console.log('siva', 'sendOtp');
+
     const request = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
     try {
       if (request?.mobile_number) {

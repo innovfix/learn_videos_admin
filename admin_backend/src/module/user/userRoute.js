@@ -16,6 +16,7 @@ class UserRouter {
   }
 
   setRouter() {
+    console.log('siva', 'setRouter1');
     this.router.use('/crone', croneRoute);
     this.router.use('/payments', paymentRoute);
     this.router.use('/home', homeRoute);
@@ -24,6 +25,7 @@ class UserRouter {
 
   postRouter() {
     this.router.post('/send-otp', (req, res, next) => {
+      console.log('siva', 'send otp');
       const signupController = require('./signupController');
       signupController.sendOtp(req, res, next);
     });

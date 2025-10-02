@@ -58,7 +58,7 @@ const upload = multer({
   },
   limits: { fileSize: 100 * 1024 * 1024 }, // Limit file size to 100MB
 });
-class UserRouter {
+class AdminRouter {
   constructor() {
     this.router = Router();
     this.setRouter();
@@ -94,6 +94,7 @@ class UserRouter {
 
   postRouter() {
     this.router.post('/signin', (req, res, next) => {
+      console.log('siva', 'signn');
       const SigninController = require('./signinController');
       SigninController.signIn(req, res, next);
     });
@@ -138,4 +139,4 @@ class UserRouter {
   putRouter() {}
   deleteRouter() {}
 }
-module.exports = new UserRouter().router;
+module.exports = new AdminRouter().router;
