@@ -8,7 +8,7 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const { generateToken } = require('../../middleware/tokenLib');
 const saltRounds = 10;
-const logger = require('./common/logger').logger;
+const logger = require('../../common/logger').logger;
 
 class AdminService {
   static async forgetPassword(data, context) {
