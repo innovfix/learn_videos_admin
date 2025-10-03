@@ -8,6 +8,7 @@ const { generateToken } = require('../../middleware/tokenLib');
 const axios = require('axios');
 const { SHA256 } = require('crypto-js');
 const jwt = require('jsonwebtoken');
+const logger = require('../../common/logger').logger;
 
 class SignupController {
   static async sendOtp(req, res) {
@@ -17,9 +18,12 @@ class SignupController {
         if (request?.mobile_number.length === 10) {
           if (request?.otp) {
             if (request?.otp.length === 4) {
-              await axios.get(
+              const result = await axios.get(
                 `https://api.authkey.io/request?authkey=${process.env.SMS_AUTH_KEY}&mobile=${request?.mobile_number}&country_code=91&sid=25451&otp=${request?.otp}`,
               );
+              if (result.status != 200) {
+                logger.error(`Method: sendOtp,  status: ${result.status}, statusText: ${result.statusText}`);
+              }
               return res.status(200).send({
                 code: 200,
                 message: 'OTP sent successfully',
