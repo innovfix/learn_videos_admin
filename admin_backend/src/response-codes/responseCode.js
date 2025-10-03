@@ -14,7 +14,7 @@ responseCodes[(exports.SUCCESS_OK = 'OK')] = 'Request completed successfully';
 
 responseCodes[(exports.EMAIL_REQUIRED = 'email_required')] = 'Please provide a valid email id';
 responseCodes[(exports.INVALID_REQUEST = '0001')] = 'Error: Invalid request';
-responseCodes[(exports.TECHNICAL_ISSUE = '0010')] = 'Error: Some technical issue';
+responseCodes[(exports.TECHNICAL_ISSUE = '0010')] = 'Error: Some technical issue. Please try again later';
 responseCodes[(exports.EMAIL_ALREADY_EXISTS = '0011')] = 'Error: The provided email is already registered.';
 responseCodes[(exports.EMAIL_NOT_EXIST = '0012')] = 'Error: The provided email does not exist.';
 responseCodes[(exports.INVALID_CREDENTIALS = '0014')] = 'Error: Invalid credentials';
