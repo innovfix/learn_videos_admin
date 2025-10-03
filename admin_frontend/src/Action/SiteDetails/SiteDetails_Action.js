@@ -8,7 +8,7 @@ export const updateGeneralSettings = (data) => {
                 type: UPDATE_SITE_DETAILS_LOADING,
                 data: true
             })
-            Authservices.GeneralSettings(data).then((data) => {
+            Authservices.getGeneralSettings(data).then((data) => {
                 if (data?.status === 200) {
                     dispatch({
                         type: UPDATE_SITE_DETAILS_SUCCESS,

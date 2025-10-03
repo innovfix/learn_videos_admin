@@ -81,7 +81,7 @@ const General = () => {
         if(siteData.shareAppIcon){
             data.append('share_app_icon', siteData.shareAppIcon);
         }
-        dispatch(action.GeneralSettings(data)).then((response) => {
+        dispatch(action.getGeneralSettings(data)).then((response) => {
             toast.success(response.responseMessage);
             let data = response.responseDetails;
             delete data.created_at;
