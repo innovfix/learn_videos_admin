@@ -10,6 +10,7 @@ const samLib = require('../src/response-codes/lib');
 const adminRoute = require('./module/admin/adminRoute');
 const userRoute = require('./module/user/userRoute');
 const util = require('util');
+const logger = require('./common/logger').logger;
 
 const fs = require('fs');
 // Create a log file (append mode)
@@ -73,8 +74,6 @@ class Server {
       }),
     );
     this.app.use((req, res, next) => {
-      console.log('iva', req.path);
-
       req.requestId = req.headers['x-request-id'] || uuidv4();
       res.setHeader('X-Request-Id', req.requestId); // Optional: include requestId in response headers
       next();
@@ -101,15 +100,14 @@ class Server {
 
   error404Handler() {
     this.app.use((req, res, next) => {
-      console.log('iva', req.path);
+      logger.error(`Method: error404Handler,  Path: ${req.path}`);
       res.status(404).json({ status: 404, message: 'pages not found' });
     });
   }
 
   errorHandler() {
     this.app.use((error, req, res, next) => {
-      console.log('iva', error, req.path);
-
+      logger.error(`Method: errorHandler,  Path: ${req.path}, Error: ${error}`);
       const errorStatus = 400 || 500;
       res.set('Access-Control-Allow-Origin', '*');
       if (error.message && parseInt(error.message) > 0 && !error.message.includes(',')) {
