@@ -44,7 +44,7 @@ const PrivacyPolicy = () => {
     }
 
 	const handleChange = (event) => {
-        setData(event.editor.getData());
+        setData(event.target.value);
 	};
 
     return (
@@ -56,8 +56,9 @@ const PrivacyPolicy = () => {
                             <h2 className="section-title">Privacy Policy</h2>
                             <form className="settings-form" onSubmit={updateAbout}>
                                 <div className="row">
-                                    <CKEditor4 data={data} handleChange={handleChange} />
+                                    <input type="text" id="title" name="title" placeholder="Enter privacy policy url" onChange={handleChange} value={data} />
                                 </div>
+                                
                                 <div className="setting-btn mt-3">
                                     <button type="submit" className="btn" disabled={updateLoading.loading}>
                                         {updateLoading.loading ? (
