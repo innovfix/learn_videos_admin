@@ -80,6 +80,13 @@ class Server {
     });
     this.app.use('/admin/v1', adminRoute);
     this.app.use('/user/v1', userRoute);
+    this.router.get('/privacy-policy', (req, res, next) => {
+      res.sendFile(path.join(__dirname, 'public', 'privacy.html'));
+    });
+    this.router.get('/terms-and-conditions', (req, res, next) => {
+      res.sendFile(path.join(__dirname, 'public', 'terms.html'));
+    });
+
     this.router.get('/details', (req, res, next) => {
       const getSiteDataController = require('./module/admin/site_details/getSiteDataController');
       getSiteDataController.getSiteDetails(req, res, next);
